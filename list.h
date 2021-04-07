@@ -1,7 +1,9 @@
 #ifndef ListFile
 #define ListFile
 
-typedef char*  value_type
+#include "stdlib.h"
+
+typedef char*  value_type;
 const int START_CAPACITY = 10;
 
 
@@ -12,7 +14,8 @@ struct List {
 };
 
 List* LST_Create();
-void LST_DestroyList(List* list);
+void LST_Destroy(List* list);
 bool LST_find(List* list, value_type value);
+void LST_add(List* list, value_type value);
 
 #endif
