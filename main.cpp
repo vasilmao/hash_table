@@ -1,18 +1,17 @@
 #include "stdio.h"
-#include "hash_table.h"
+#include "dictionary.h"
 
-size_t hf(char* s) {
+size_t hf(Word word) {
     printf("yay hf\n");
     return 1;
 }
 
 int main() {
-    HashTable* ht = HT_Create(hf);
+    Dictionary* dict = DICT_CreateEmpty(hf);
     printf("yeah1\n");
-    HT_add(ht, "keklol");
+    DICT_AddWord(dict, "keklol", "zalupa");
     printf("yeah2\n");
-    printf("%d\n", (int)HT_search(ht, "keklol"));
+    printf("%s\n", DICT_GetTranslation(dict, "keklol"));
     printf("yeah3\n");
-    HT_Destroy(ht);
-    printf("yeah4\n");
-}
+    DICT_Destroy(dict);
+    printf("yeah4\n")

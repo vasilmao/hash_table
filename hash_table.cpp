@@ -1,13 +1,14 @@
 #include "hash_table.h"
 #include "stdio.h"
 
-HashTable* HT_Create(key_type (*hash_function)(value_type value)) {
-    HashTable* ht = (HashTable*)calloc(1, sizeof(HashTable));
-    ht->length = HT_TABLE_SIZE;
-    ht->hash_function = hash_function;
+HashTable* HT_Create(key_type (*hash_function)(value_type value), bool (*equality_function)(value_type val1, value_type val2)) {
+    HashTable* ht         = (HashTable*)calloc(1, sizeof(HashTable));
+    ht->length            = HT_TABLE_SIZE;
+    ht->hash_function     = hash_function;
+    ht->equality_function = equality_function;
     ht->array = (List**)calloc(ht->length, sizeof(List*));
     for (size_t i = 0; i < ht->length; ++i) {
-        ht->array[i] = LST_Create();
+        ht->array[i] = LST_Create(equality_function);
     }
     return ht;
 }
@@ -20,12 +21,22 @@ void HT_Destroy(HashTable* table) {
     free(table);
 }
 
-bool HT_search(HashTable* table, value_type find_value) {
+value_type HT_search(HashTable* table, value_type find_value) {
+    printf("ht: getting translation\n");
     key_type find_hash = table->hash_function(find_value);
-    return LST_find(table->array[find_hash], find_value);
+    printf("ht: got hash function\n");
+    return LST_search(table->array[find_hash], find_value);
 }
 
 void HT_add(HashTable* table, value_type add_value) {
     key_type add_hash = table->hash_function(add_value);
     LST_add(table->array[add_hash], add_value);
+}
+
+size_t* HT_GetStatistics(HashTable* table) {
+    size_t* array = (size_t*)calloc(table->length, sizeof(size_t));
+    for (size_t i = 0; i < table->length; ++i) {
+        array[i] = table->array[i]->length;
+    }
+    return array;
 }
