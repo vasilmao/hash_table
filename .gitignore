@@ -1,3 +1,4 @@
 *.out
 *.o
 callgrind.*
+out.csv

@@ -14,11 +14,15 @@ HashTable* HT_Create(key_type (*hash_function)(value_type value), bool (*equalit
 }
 
 void HT_Destroy(HashTable* table) {
+    printf("destr ht: destroying lists\n");
     for (size_t i = 0; i < table->length; ++i) {
         LST_Destroy(table->array[i]);
     }
+    printf("all lists destroyed\n");
     free(table->array);
+    printf("ht array lists destroyed\n");
     free(table);
+    printf("ht destroyed\n");
 }
 
 value_type HT_search(HashTable* table, value_type find_value) {
@@ -29,7 +33,9 @@ value_type HT_search(HashTable* table, value_type find_value) {
 }
 
 void HT_add(HashTable* table, value_type add_value) {
-    key_type add_hash = table->hash_function(add_value);
+    key_type add_hash = table->hash_function(add_value) % table->length;
+    printf("hash got\n");
+    printf("%zu\n", add_hash);
     LST_add(table->array[add_hash], add_value);
 }
 

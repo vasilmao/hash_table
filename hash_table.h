@@ -4,7 +4,7 @@
 #include "list.h"
 
 
-const size_t HT_TABLE_SIZE = 4079;
+const size_t HT_TABLE_SIZE = 157393;
 typedef size_t key_type;
 
 struct HashTable {
