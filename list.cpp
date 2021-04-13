@@ -28,10 +28,10 @@ void LST_Destroy(List* list) {
 }
 
 value_type LST_search(List* list, value_type value) {
-    printf("list: getting trans\n");
+    // printf("list: getting trans\n");
     for (size_t i = 0; i < list->length; ++i) {
         if (list->equality_function(list->array[i], value)) {
-            printf("yeah equality\n");
+            // printf("yeah equality\n");
             return list->array[i];
         }
     }
@@ -40,14 +40,14 @@ value_type LST_search(List* list, value_type value) {
 
 void LST_add(List* list, value_type value) {
     assert(list);
-    printf("%p\n", list);
+    // printf("%p\n", list);
     list->length;
-    printf("yeah\n");
-    printf("%zu\n", list->length);
-    printf("%zu\n", list->capacity);
-    printf("yoy\n");
+    // printf("yeah\n");
+    // printf("%zu\n", list->length);
+    // printf("%zu\n", list->capacity);
+    // printf("yoy\n");
     if (list->length == list->capacity) {
-        printf("increasing\n");
+        // printf("increasing\n");
         increase_capacity(list);
     }
     list->array[list->length++] = value;

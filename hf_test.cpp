@@ -20,8 +20,8 @@ int write_arr_to_buffer(size_t* array, size_t cnt, char* buffer) {
 #define TEST_HF(hf) {                                                              \
     dict = DICT_CreateEmpty(hf);                                                   \
     DICT_ParseFile(dict, "dic.txt", '\n');                                         \
-    stats = DICT_GetTableStat(dict);                                              \
-    written_cnt += write_arr_to_buffer(stats, ht_size, out_buffer + written_cnt); \
+    stats = DICT_GetTableStat(dict);                                               \
+    written_cnt += write_arr_to_buffer(stats, ht_size, out_buffer + written_cnt);  \
     DICT_Destroy(dict);                                                            \
 }
 
@@ -47,6 +47,6 @@ int main() {
     open_file(&out_file, "out.csv", "w");
     fwrite(out_buffer, written_cnt, sizeof(char), out_file);
     fclose(out_file);
-    printf("yeah4\n");
+    // printf("yeah4\n");
     return 0;
 }
