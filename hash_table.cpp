@@ -27,7 +27,7 @@ void HT_Destroy(HashTable* table) {
 
 value_type HT_search(HashTable* table, value_type find_value) {
     // printf("ht: getting translation\n");
-    key_type find_hash = table->hash_function(find_value);
+    key_type find_hash = table->hash_function(find_value) % table->length;
     // printf("ht: got hash function\n");
     return LST_search(table->array[find_hash], find_value);
 }

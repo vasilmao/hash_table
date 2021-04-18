@@ -23,6 +23,7 @@ int write_arr_to_buffer(size_t* array, size_t cnt, char* buffer) {
     stats = DICT_GetTableStat(dict);                                               \
     written_cnt += write_arr_to_buffer(stats, ht_size, out_buffer + written_cnt);  \
     DICT_Destroy(dict);                                                            \
+    free(stats);                                                                   \
 }
 
 int main() {
@@ -33,8 +34,6 @@ int main() {
     char* out_buffer = (char*)calloc((ht_size * (sizeof(size_t) + 1)) * HASH_FUNCTIONS_CNT, sizeof(char));
     int written_cnt = 0;
     size_t* stats = NULL;
-    //printf("yeah1\n");
-    //printf("yeah2\n");
     TEST_HF(hash_function_const);
     TEST_HF(hash_function_len);
     TEST_HF(hash_function_first_ascii);
@@ -47,6 +46,6 @@ int main() {
     open_file(&out_file, "out.csv", "w");
     fwrite(out_buffer, written_cnt, sizeof(char), out_file);
     fclose(out_file);
-    // printf("yeah4\n");
+    free(out_buffer);
     return 0;
 }

@@ -15,7 +15,7 @@ size_t hash_function_len(Word word) {
 }
 
 size_t hash_function_first_ascii(Word word) {
-    printf("%d\n", (int)(*word.word));
+    // printf("%d\n", (int)(*word.word));
     return (unsigned char)(*(word.word));
 }
 
