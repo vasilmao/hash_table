@@ -45,3 +45,5 @@ dispersion is 4.34590186277604, still don't have ideas why they differs so much
 Niice, maximum bucket size is 6   
 dispersion is 0.9834975021219428   
 So, this is the best hash function and I will use it
+##2. Real dictionary
+New make target creates .out file that gets .txt file as input and creates .html file with same text, but when you toggle word with your mouse it shows it's translation
