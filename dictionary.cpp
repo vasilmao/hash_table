@@ -1,6 +1,8 @@
 #include "dictionary.h"
 #include "stdio.h"
 
+char* EncodeCyrillicWithUtf8(char* word);
+
 Dictionary* DICT_CreateEmpty(key_type (*hash_function)(value_type value)) {
     Dictionary* dict = (Dictionary*)calloc(1, sizeof(Dictionary));
     dict->table = HT_Create(hash_function, words_equal);
@@ -19,18 +21,19 @@ void DICT_ParseFile(Dictionary* dict, char* filename, char separator) {
     char* buffer = NULL;
     uint64_t buf_size = 0;
     read_buffer(&buffer, &buf_size, filename, file);
-    char* line = strtok(buffer, "\n");
+    char* line = strtok(buffer, "\r\n");
     while (line != NULL) {
         char* translation = strchr(line, '-');
-        // printf("yoy\n");
+        if (translation == NULL) {
+            line = strtok(NULL, "\r\n");
+            continue;
+        }
         *translation = '\0';
         ++translation;
-        // printf("%s\n", line);
         DICT_AddWord(dict, line, translation);
-        // printf("yeah\n");
-        line = strtok(NULL, "\n");
+        if (translation)
+        line = strtok(NULL, "\r\n");
     }
-    // printf("yeah3\n");
     free(buffer);
     fclose(file);
 }
@@ -43,13 +46,50 @@ char* DICT_GetTranslation(Dictionary* dict, char* word) {
 
 void DICT_AddWord(Dictionary* dict, char* word, char* translation) {
     char* word_copy        = (char*)calloc(strlen(word) + 1,        sizeof(char));
-    char* translation_copy = (char*)calloc(strlen(translation) + 1, sizeof(char));
+    // char* translation_copy = (char*)calloc(strlen(translation) * 2 + 1, sizeof(char));
     assert(word_copy);
-    assert(translation_copy);
+    //assert(translation_copy);
     strcpy(word_copy, word);
-    strcpy(translation_copy, translation);
+    char* translation_copy_utf8 = EncodeCyrillicWithUtf8(translation);
+    //
+    // while (*translation != '\0') {
+    //     *translation_copy = 0xd0;
+    //     translation_copy++;
+    //     printf("%d %d %d %c\n", (int)(*translation), (char)'а', (int)(*translation - 'а'), *translation);
+    //     *translation_copy = (*translation - (-32)) + 0xb0;
+    //     ++translation_copy;
+    //     ++translation;
+    // }
+    // printf("%x\n", (int)(*translation_copy_utf8));
+    //strcpy(translation_copy, translation);
     // printf("adding\n");
-    HT_add(dict->table, {word_copy, translation_copy});
+    HT_add(dict->table, {word_copy, translation_copy_utf8});
+}
+
+char* EncodeCyrillicWithUtf8(char* word) {
+    int len = strlen(word);
+    char* new_word = (char*)calloc(len * 2 + 1, sizeof(char));
+    char* new_word_start = new_word;
+    assert(new_word);
+    printf("bruh %s\n", word);
+    while (*word != '\0') {
+        printf("%d\n", *word);
+        if (*word >= 0) {
+            *(new_word++) = *word;
+        } else if (*word <= -17) {
+            *(new_word++) = 0xd0;
+            *(new_word++) = (*word + 32) + 0xb0;
+        } else if (*word == -72) {
+            *(new_word++) = 0xd1;
+            *(new_word++) = 0x91;
+        } else {
+            *(new_word++) = 0xd1;
+            *(new_word++) = (*word + 16) + 0x80;
+        }
+        ++word;
+    }
+    printf("yeah %s\n", new_word);
+    return new_word_start;
 }
 
 size_t* DICT_GetTableStat(Dictionary* dict) {

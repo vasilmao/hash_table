@@ -13,7 +13,7 @@ struct OutBuffer {
 void HTML_CreateTranslation(Dictionary* dict, char* file_to_translate);
 OutBuffer* CreateBuffer();
 void IncreaseCapacity(OutBuffer* buffer);
-void WriteToBuffer(OutBuffer* buffer, char* write_str, int write_str_len);
+void WriteToBuffer(OutBuffer* buffer, const char* write_str, int write_str_len);
 void DestroyBuffer(OutBuffer* buffer);
 
 #endif

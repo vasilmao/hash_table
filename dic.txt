@@ -1,8 +1,7 @@
-the- 
+the-
 of-из
 and-и
 to-к
-a-а
 in-в
 for-для
 is-является
@@ -78,8 +77,6 @@ get-получать
 pm-вечера
 view-посмотреть
 online-онлайн
-c-c
-e-е
 first-первый
 am-являюсь
 been-был
@@ -87,7 +84,6 @@ would-было бы
 how-как
 were-мы
 me-меня
-s-s
 services-сервисы
 some-некоторый
 these-эти
@@ -115,13 +111,11 @@ into-в
 email-электронное письмо
 two-два
 health-здоровье
-n-п
 world-мир
 re-повторно
 next-следующий
 used-использовал
 go-идти
-b-б
 work-работа
 last-последний
 most-наиболее
@@ -137,7 +131,6 @@ system-система
 post-почта
 her-ее
 city-город
-t-т
 add-добавлять
 policy-политика
 number-номер
@@ -155,7 +148,6 @@ jan-ян
 good-хорошо
 video-видео
 well-хорошо
-d-d
 where-где
 info-информация
 rights-права
@@ -164,7 +156,6 @@ books-книги
 high-высокая
 school-школа
 through-через
-m-м
 each-каждый
 links-ссылки
 she-она
@@ -176,7 +167,6 @@ privacy-конфиденциальность
 book-книга
 items-предметы
 company-компания
-r-р
 read-читать
 group-группа
 sex-секс
@@ -203,14 +193,12 @@ games-игры
 way-способ
 days-дней
 management-управление
-p-п
 part-часть
 could-мог
 great-большой
 united-объединились
 hotel-отель
 real-настоящий
-f-ж
 item-пункт
 international-международный
 center-центр
@@ -260,13 +248,10 @@ subject-предмет
 between-между
 forum-форум
 family-семья
-l-л
 long-длинный
 based-на основе
-w-ш
 code-код
 show-показывать
-o-о
 even-четный
 black-чернить
 check-проверять
@@ -356,7 +341,6 @@ during-в течение
 usa-сша
 return-возвращаться
 students-студенты
-v-v
 shopping-поход по магазинам
 account-учетная запись
 times-раз
@@ -378,8 +362,6 @@ department-отделение
 title-заглавие
 description-описание
 non-не
-k-k
-y-y
 insurance-страхование
 another-другой
 why-зачем
@@ -414,7 +396,6 @@ man-человек
 card-карта
 jobs-рабочие места
 provide-предоставлять
-j-j
 food-еда
 source-источник
 author-автор
@@ -556,7 +537,6 @@ give-дайте
 memory-объем памяти
 performance-представление
 social-социальное
-q-q
 august-август
 quote-цитировать
 language-язык
@@ -584,7 +564,6 @@ example-пример
 girls-девушки
 additional-дополнительный
 password-пароль
-z-z
 latest-последний
 something-что-нибудь
 road-дорога
