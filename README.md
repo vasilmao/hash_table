@@ -79,6 +79,10 @@ woah! now hf does 6 times less tacts! What about time?
 0,422s! That's 40% faster! Les gooo further
 
 //here is line i completed true
+#### Lst_search rewrite
+That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
+![cg_o3_hf_lstsrch](/callgrind_results/cg_o3_hf_lstsrch.png)
+0,411s. I think hash table search function ate hash function. So, 41 % of time
 
 #### word compare
 ![cg_o3_hf_strcmp](/callgrind_results/cg_o3_hf_strcmp.png)   
