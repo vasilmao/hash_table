@@ -67,5 +67,11 @@ Callgrind of -O2
 Callgrind of -O3
 ### 3.2 analyzing
 o1, o2, o3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, i will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search and HT_Search.
-Hash function calls strlen, but let's see the chain: the argument is char* without length, DICT_GetTranslation calls HT_search with same char* without length HT computes hash using strlen, and then LST compares strings without length needed, so strlen stays here.   
-Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization, because we have too few length.
+* Hash function calls strlen, but let's see the chain: the argument is char* without length, DICT_GetTranslation calls HT_search with same char* without length HT computes hash using strlen, and then LST compares strings without length needed, so strlen stays here. Also, as we can see, strlen already speeded up with avx2.   
+* Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization that uses _mm_crc32_u8, because we have too few length.
+* HT_search: it needs to take mod prime number, o3 optimized it as much as it can
+* Strcmp: strcmp avx2 source code consists of about 500 lines, so maybe we can do it faster
+to count effectivenes, let's take sum of tacts and sub test genering, like for o3 it is 3 3645 335 - 1 173 847 - 966458620 - 509418811 - 210099700 = 1 958 184 126
+### 3.2 rewriting
+#### crc32 rewrite
+![cg_o3](/callgrind_results/cg_o3_hf.png)
