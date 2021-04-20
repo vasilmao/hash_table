@@ -54,7 +54,6 @@ char* EncodeCyrillicWithUtf8(char* word) {
     int len = strlen(word);
     char* new_word = (char*)calloc(len * 2 + 1, sizeof(char));
     char* new_word_start = new_word;
-    assert(new_word);
     while (*word != '\0') {
         if (*word >= 0) {
             *(new_word++) = *word;
