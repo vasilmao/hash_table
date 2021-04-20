@@ -68,4 +68,4 @@ Callgrind of -O3
 ### 3.2 analyzing
 o1, o2, o3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, i will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search and HT_Search.
 Hash function calls strlen, but let's see the chain: the argument is char* without length, DICT_GetTranslation calls HT_search with same char* without length HT computes hash using strlen, and then LST compares strings without length needed, so strlen stays here.   
-Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization.
+Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization, because we have too few length.
