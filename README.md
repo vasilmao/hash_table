@@ -82,3 +82,6 @@ and time is 0,640s versus no optimization 0,700.
 its better!
 score is 517 634 941, and slow strcmp avx became fast 0x01bc
 to talk about time, it is 0,585s versus last 0,640s versus no opt 0,700s
+#### strlen
+![cg_o3_hf_strcmp_strlen](/callgrind_results/cg_o3_hf_strcmp_strlen.png)   
+Oh no! This is really bad. So, o3 knows how to count string length better than me
