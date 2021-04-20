@@ -28,10 +28,13 @@ void LST_Destroy(List* list) {
 }
 
 value_type LST_search(List* list, value_type value) {
-    // printf("list: getting trans\n");
+    //printf("searching for %s kek %zu lol\n", value.word, list->length);
     for (size_t i = 0; i < list->length; ++i) {
+        //printf("%d\n",(int)list->equality_function({"luck", NULL}, value));
+        //printf("%d\n",(int)list->equality_function({"luck", NULL}, list->array[0]));
+        //printf("%d\n",(int)list->equality_function(list->array[i], value));
+        //printf("bruh %zu %s\n", i,  list->array[i].word);
         if (list->equality_function(list->array[i], value)) {
-            // printf("yeah equality\n");
             return list->array[i];
         }
     }

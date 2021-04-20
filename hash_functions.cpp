@@ -77,6 +77,38 @@ size_t hash_function_rol(Word word) {
 //     }
 // }
 
+// asm(".intel_syntax noprefix\n"
+// ".globl hash_function_crc32\n"
+//     ".type hash_function_crc32, @function\n"
+//     "hash_function_crc32:\n"
+//     "xor rax, rax\n"
+//     "xor rdx, rdx\n"
+//     "push rdi\n"
+//     "call strlen@PLT\n"
+//     "mov edx, eax\n"
+//     "pop rdi\n"
+//     "xor rax, rax\n"
+//     "crcloop:\n"
+//         "cmp rdx, 8\n"
+//         "jae Crc64\n"
+//         "crclooplow:"
+//         "cmp rdx, 0\n"
+//         "je crcloopexit\n"
+//         "crc32 rax, byte ptr [rdi]\n"
+//         "inc rdi\n"
+//         "dec rdx\n"
+//         "jmp crclooplow\n"
+//         "Crc64:\n"
+//         "crc32 rax, qword ptr [rdi]\n"
+//         "add rdi, 8\n"
+//         "sub rdx, 8\n"
+//         "jmp crcloop\n"
+//     "crcloopexit:\n"
+//     //"xor rax, rax\n"
+//     "ret\n"
+//     ".att_syntax noprefix\n"
+// );
+
 size_t hash_function_crc32(Word word) {
     uint32_t crc_ans = 0;
     int length = strlen(word.word);
@@ -84,5 +116,6 @@ size_t hash_function_crc32(Word word) {
     for (int i = 0; i < length; ++i) {
         crc_ans = _mm_crc32_u8(crc_ans, data[i]);
     }
+    //printf("%zu %zu\n", crc_ans,  hash_function_crc32_1(word));
     return crc_ans;
 }
