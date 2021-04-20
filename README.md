@@ -71,7 +71,13 @@ o1, o2, o3 doesn't really differ. Let's try to optimize some functions. I won't 
 * Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization that uses _mm_crc32_u8, because we have too few length.
 * HT_search: it needs to take mod prime number, o3 optimized it as much as it can
 * Strcmp: strcmp avx2 source code consists of about 500 lines, so maybe we can do it faster
-to count effectivenes, let's take sum of tacts and sub test genering, like for o3 it is 3 3645 335 - 1 173 847 - 966458620 - 509418811 - 210099700 = 1 958 184 126
+to count effectivenes, let's take sum of tacts and sub test genering, like for o3 it is 3 3645 335 - 1 173 847 - 966458620 - 509418811 - 210099700 = 785 510 618
 ### 3.2 rewriting
 #### crc32 rewrite
-![cg_o3](/callgrind_results/cg_o3_hf.png)
+![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
+hash function became better! now score is 637 832 025
+and time is _ versus no optimization _.
+#### word compare
+![cg_o3_hf_strcmp](/callgrind_results/cg_o3_hf_strcmp.png)   
+its better!
+score is 517 634 941, and slow strcmp avx became fast 0x01bc
