@@ -23,7 +23,7 @@ asm(".intel_syntax noprefix\n"
         "mov rax, 1\n"
         "ret\n"
     "LoopExit:\n"
-    "xor rax, rax\n"
+    //"xor rax, rax\n"
     "ret\n"
     ".att_syntax noprefix\n"
 );
