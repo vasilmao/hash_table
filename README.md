@@ -76,8 +76,9 @@ to count effectivenes, let's take sum of tacts and sub test genering, like for o
 #### crc32 rewrite
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
 hash function became better! now score is 637 832 025
-and time is _ versus no optimization _.
+and time is 0,640s versus no optimization 0,700.
 #### word compare
 ![cg_o3_hf_strcmp](/callgrind_results/cg_o3_hf_strcmp.png)   
 its better!
 score is 517 634 941, and slow strcmp avx became fast 0x01bc
+to talk about time, it is 0,585s versus last 0,640s versus no opt 0,700s
