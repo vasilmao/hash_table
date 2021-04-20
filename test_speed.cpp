@@ -2,7 +2,7 @@
 #include "html_translator.h"
 #include "hash_functions.h"
 
-const int test_num = 4000000;
+const int test_num = 30000;
 const int max_word_len = 20;
 
 void DoTests(Dictionary* dict);
@@ -22,7 +22,9 @@ void DoTests(Dictionary* dict) {
             current_word[j] = rand() % 128;
         }
         current_word[word_len] = 0;
-        volatile char* ans = DICT_GetTranslation(dict, current_word);
+        for (int j = 0; j < 100; ++j) {
+            volatile char* ans = DICT_GetTranslation(dict, current_word);
+        }
     }
     free(current_word);
 }
