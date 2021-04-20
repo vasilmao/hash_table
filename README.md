@@ -85,6 +85,7 @@ to talk about time, it is 0,596s versus last 0,640s versus no opt 0,700s
 #### strlen
 ![cg_o3_hf_strcmp_strlen](/callgrind_results/cg_o3_hf_strcmp_strlen.png)   
 Oh no! This is really bad. So, o3 knows how to count string length better than me
-### crc32 with asm 
-Rewrite crc32 with asm
+#### crc32 with asm 
+Rewrite crc32 with asm, but there is fun fact: crc32(ABCD) = crc32(A^crc32(B^crc32(C^crc32(D)))), so if word len >= 8 we can use crc32 for uint64_t as 8 chars, speed x8!
 ![cg_o3_hfasm_strcmp](/callgrind_results/cg_o3_hfasm_strcmp.png)
+the best result, it gives 0,582s in time, 492 451 173 in score
