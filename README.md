@@ -85,3 +85,5 @@ to talk about time, it is 0,585s versus last 0,640s versus no opt 0,700s
 #### strlen
 ![cg_o3_hf_strcmp_strlen](/callgrind_results/cg_o3_hf_strcmp_strlen.png)   
 Oh no! This is really bad. So, o3 knows how to count string length better than me
+### conclusion 
+So, we have 16% upgrade in time and 34% upgrade in tacts due to hardware crc32 and just asm-rewritten word compare
