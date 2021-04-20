@@ -11,7 +11,7 @@ struct Word {
 
 const Word NULL_WORD = {NULL, NULL};
 
-bool words_equal(Word word1, Word word2);
+extern "C" bool words_equal(Word word1, Word word2);
 void DestroyElement(Word word);
 
 #endif
