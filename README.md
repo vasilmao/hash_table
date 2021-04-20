@@ -75,24 +75,15 @@ To see the difference i will compare time and tacts from callgrind
 #### crc32 rewrite
 Okay, at first, there is an intel command called crc32. Secondly, I am rewriting it in asm. Thirdly, i am going to do a trick: if len of string is more than 8, i can take first 8 chars into uint64_t and call one crc32 instead of eight, answer will be the same.
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
-woah! now hf does 6 times less tacts! What about time? 
+woah! now hf does 2 times less tacts! What about time? 
 0,422s! That's 40% faster! Les gooo further
 
-//here is line i completed true
 #### Lst_search rewrite
 That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
 ![cg_o3_hf_lstsrch](/callgrind_results/cg_o3_hf_lstsrch.png)
-0,411s. I think hash table search function ate hash function. So, 41 % of time
+0,411s. I think hash table search function ate hash function. So, 41 % of time, not really much
 
-#### word compare
-![cg_o3_hf_strcmp](/callgrind_results/cg_o3_hf_strcmp.png)   
-its better!
-score is 548 153 850, and slow strcmp avx became fast 0x01bc
-to talk about time, it is 0,596s versus last 0,640s versus no opt 0,700s
-#### strlen
-![cg_o3_hf_strcmp_strlen](/callgrind_results/cg_o3_hf_strcmp_strlen.png)   
-Oh no! This is really bad. So, o3 knows how to count string length better than me
-#### crc32 with asm 
-Rewrite crc32 with asm, but there is fun fact: crc32(ABCD) = crc32(A^crc32(B^crc32(C^crc32(D)))), so if word len >= 8 we can use crc32 for uint64_t as 8 chars, speed x8!
-![cg_o3_hfasm_strcmp](/callgrind_results/cg_o3_hfasm_strcmp.png)
-the best result, it gives 0,582s in time, 492 451 173 in score
+#### word_equal rewrite
+I think that i can rewrite word_equal function so strcmp will be short and inlined. Results:
+![cg_o3_hf_lstsrch_we](/callgrind_results/cg_o3_hf_lstsrch_we.png)
+0,384s. 45%! worth it! (?)
