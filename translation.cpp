@@ -7,7 +7,9 @@
 // }
 
 // rdi, rdx - arguments
+// damage rcx, rax, rdi, rdx
 asm(".intel_syntax noprefix\n"
+".text\n"
 ".globl words_equal\n"
     ".type words_equal, @function\n"
     "words_equal:\n"

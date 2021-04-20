@@ -30,14 +30,17 @@ void DICT_ParseFile(Dictionary* dict, char* filename, char separator) {
         *translation = '\0';
         ++translation;
         DICT_AddWord(dict, line, translation);
+        // printf("%s %s\n", line, translation);
         if (translation)
         line = strtok(NULL, "\r\n");
     }
     free(buffer);
     fclose(file);
+    // printf("file parsed\n");
 }
 
 char* DICT_GetTranslation(Dictionary* dict, char* word) {
+    // printf("dict: searching %s\n", word);
     Word result = HT_search(dict->table, {word, NULL});
     return result.translation;
 }

@@ -3,3 +3,4 @@
 callgrind.*
 out.csv
 obj/
+*.s

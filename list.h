@@ -17,7 +17,7 @@ struct List {
 
 List*      LST_Create(bool (*equality_function)(value_type val1, value_type val2));
 void       LST_Destroy(List* list);
-value_type LST_search(List* list, value_type value);
+extern "C" value_type LST_search(List* list, value_type value);
 void       LST_add(List* list, value_type value);
 
 #endif
