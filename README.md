@@ -58,30 +58,28 @@ Tolstoy's "War and peace" has about 200 000 words, so let's stranslate 20 of tho
 So, that's it.   
 Let's see what callgrind says
 ![cg_o0](/callgrind_results/cg_o0.png)
-This is callgrind of -O0
-![cg_o1](/callgrind_results/cg_o1.ng)
-Callgrind of -O1. Hash function became much faster
+This is callgrind of -O0.   
+![cg_o1](/callgrind_results/cg_o1.png)
+Callgrind of -O1.
 ![cg_o2](/callgrind_results/cg_o2.png)
 Callgrind of -O2
 ![cg_o3](/callgrind_results/cg_o3.png)
 Callgrind of -O3
 
 
-//here is line i completed true
-
 
 ### 3.2 analyzing
-o1, o2, o3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, i will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search and HT_Search.
-* Hash function calls strlen, but let's see the chain: the argument is char* without length, DICT_GetTranslation calls HT_search with same char* without length HT computes hash using strlen, and then LST compares strings without length needed, so strlen stays here. Also, as we can see, strlen already speeded up with avx2.   
-* Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization that uses _mm_crc32_u8, because we have too few length.
-* HT_search: it needs to take mod prime number, o3 optimized it as much as it can
-* Strcmp: strcmp avx2 source code consists of about 500 lines, so maybe we can do it faster
-to count effectivenes, let's take sum of tacts and sub test genering, like for o3 it is 3 3645 335 - 1 173 847 - 966458620 - 509418811 - 210099700 = 785 510 618
+o2, o3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, i will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search, strcmp and HT_Search.   
+To see the difference i will compare time and tacts from callgrind
 ### 3.2 rewriting
 #### crc32 rewrite
+Okay, at first, there is an intel command called crc32. Secondly, I am rewriting it in asm. Thirdly, i am going to do a trick: if len of string is more than 8, i can take first 8 chars into uint64_t and call one crc32 instead of eight, answer will be the same.
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
-hash function became better! now score is 637 832 025
-and time is 0,640s versus no optimization 0,700.
+woah! now hf does 6 times less tacts! What about time? 
+0,422s! That's 40% faster! Les gooo further
+
+//here is line i completed true
+
 #### word compare
 ![cg_o3_hf_strcmp](/callgrind_results/cg_o3_hf_strcmp.png)   
 its better!
