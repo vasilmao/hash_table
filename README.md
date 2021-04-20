@@ -52,7 +52,8 @@ What I want is to speed up all of this. Let's test the time.
 Tolstoy's "War and peace" has about 200 000 words, so let's stranslate 20 of those books (4 000 000 words). Words are generated randomly chars from 0 to 128, length is random from 0 to 20.
 | O0     | O1     | O2     | O3     |
 | ------ | ------ | ------ | ------ |
-| 0,854s | 0,765s | 0,729s | 0,709s |
+| 0,791s | 0,725s | 0,706s | 0,700s |
 
 So, that's it.   
 Let's see what callgrind says
+
