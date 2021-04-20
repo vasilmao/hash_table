@@ -25,7 +25,7 @@ void read_buffer(char** buffer, uint64_t* buffer_size, const char* input_filenam
     assert(buffer);
     assert(input_filename);
     assert(input);
-    *buffer_size = get_file_size(input_filename);
+    *buffer_size = get_file_size(input_filename) + 1;
 
     *buffer = (char *) calloc(*buffer_size, sizeof(char));
     *buffer_size = fread(*buffer, sizeof(char), *buffer_size, input);

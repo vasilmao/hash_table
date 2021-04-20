@@ -10,7 +10,7 @@ struct OutBuffer {
     int capacity;
 };
 
-void HTML_CreateTranslation(Dictionary* dict, char* file_to_translate);
+void HTML_CreateTranslation(Dictionary* dict, const char* file_to_translate);
 OutBuffer* CreateBuffer();
 void IncreaseCapacity(OutBuffer* buffer);
 void WriteToBuffer(OutBuffer* buffer, const char* write_str, int write_str_len);

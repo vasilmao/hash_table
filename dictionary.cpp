@@ -10,7 +10,6 @@ Dictionary* DICT_CreateEmpty(key_type (*hash_function)(value_type value)) {
 }
 
 void DICT_Destroy(Dictionary* dict) {
-    // printf("destroying dict\n");
     HT_Destroy(dict->table);
     free(dict);
 }
@@ -39,30 +38,15 @@ void DICT_ParseFile(Dictionary* dict, char* filename, char separator) {
 }
 
 char* DICT_GetTranslation(Dictionary* dict, char* word) {
-    // printf("dict: getting translation\n");
     Word result = HT_search(dict->table, {word, NULL});
     return result.translation;
 }
 
 void DICT_AddWord(Dictionary* dict, char* word, char* translation) {
-    char* word_copy        = (char*)calloc(strlen(word) + 1,        sizeof(char));
-    // char* translation_copy = (char*)calloc(strlen(translation) * 2 + 1, sizeof(char));
+    char* word_copy = (char*)calloc(strlen(word) + 1, sizeof(char));
     assert(word_copy);
-    //assert(translation_copy);
     strcpy(word_copy, word);
     char* translation_copy_utf8 = EncodeCyrillicWithUtf8(translation);
-    //
-    // while (*translation != '\0') {
-    //     *translation_copy = 0xd0;
-    //     translation_copy++;
-    //     printf("%d %d %d %c\n", (int)(*translation), (char)'а', (int)(*translation - 'а'), *translation);
-    //     *translation_copy = (*translation - (-32)) + 0xb0;
-    //     ++translation_copy;
-    //     ++translation;
-    // }
-    // printf("%x\n", (int)(*translation_copy_utf8));
-    //strcpy(translation_copy, translation);
-    // printf("adding\n");
     HT_add(dict->table, {word_copy, translation_copy_utf8});
 }
 
@@ -71,9 +55,7 @@ char* EncodeCyrillicWithUtf8(char* word) {
     char* new_word = (char*)calloc(len * 2 + 1, sizeof(char));
     char* new_word_start = new_word;
     assert(new_word);
-    printf("bruh %s\n", word);
     while (*word != '\0') {
-        printf("%d\n", *word);
         if (*word >= 0) {
             *(new_word++) = *word;
         } else if (*word <= -17) {
@@ -88,7 +70,6 @@ char* EncodeCyrillicWithUtf8(char* word) {
         }
         ++word;
     }
-    printf("yeah %s\n", new_word);
     return new_word_start;
 }
 
