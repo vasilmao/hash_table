@@ -26,11 +26,11 @@ void HT_Destroy(HashTable* table) {
 }
 
 value_type HT_search(HashTable* table, value_type find_value) {
-    //printf("ht: getting translation %s\n", find_value.word);
+    // printf("ht: getting translation %s\n", find_value.word);
     key_type find_hash = table->hash_function(find_value) % table->length;
-    //printf("ht: got %zu\n", find_hash);
+    // printf("ht: got %zu\n", find_hash);
     value_type result = LST_search(table->array[find_hash], find_value);
-    //printf("%p\n", result.word);
+    // printf("%p\n", result.word);
     return result;
 }
 
