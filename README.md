@@ -47,3 +47,12 @@ dispersion is 0.9834975021219428
 So, this is the best hash function and I will use it
 ## 2. Real dictionary
 New make target creates .out file that gets .txt file as input and creates .html file with same text, but when you toggle word with your mouse it shows it's translation
+## 3. Speeding up
+What I want is to speed up all of this. Let's test the time.   
+Tolstoy's "War and peace" has about 200 000 words, so let's stranslate 20 of those books (4 000 000 words). Words are generated randomly chars from 0 to 128, length is random from 0 to 20.
+| O0     | O1     | O2     | O3     |
+| ------ | ------ | ------ | ------ |
+| 0,854s | 0,765s | 0,729s | 0,709s |
+
+So, that's it.   
+Let's see what callgrind says
