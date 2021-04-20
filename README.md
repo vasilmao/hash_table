@@ -50,10 +50,22 @@ New make target creates .out file that gets .txt file as input and creates .html
 ## 3. Speeding up
 What I want is to speed up all of this. Let's test the time.   
 Tolstoy's "War and peace" has about 200 000 words, so let's stranslate 20 of those books (4 000 000 words). Words are generated randomly chars from 0 to 128, length is random from 0 to 20.
+### 3.1 testing
 | O0     | O1     | O2     | O3     |
 | ------ | ------ | ------ | ------ |
 | 0,791s | 0,725s | 0,706s | 0,700s |
 
 So, that's it.   
 Let's see what callgrind says
-
+![cg_o0](/callgrind_results/cg_o0.png)
+This is callgrind of -O0
+![cg_o1](/callgrind_results/cg_o1.ng)
+Callgrind of -O1. Hash function became much faster
+![cg_o2](/callgrind_results/cg_o2.png)
+Callgrind of -O2
+![cg_o3](/callgrind_results/cg_o3.png)
+Callgrind of -O3
+### 3.2 analyzing
+o1, o2, o3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, i will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search and HT_Search.
+Hash function calls strlen, but let's see the chain: the argument is char* without length, DICT_GetTranslation calls HT_search with same char* without length HT computes hash using strlen, and then LST compares strings without length needed, so strlen stays here.   
+Crc32 optimization: [there](https://github.com/komrad36/CRC) is a big article of speeding up crc32, i will take hardware optimization.
