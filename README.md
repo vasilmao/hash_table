@@ -76,14 +76,22 @@ To see the difference i will compare time and tacts from callgrind
 Okay, at first, there is an intel command called crc32. Secondly, I am rewriting it in asm. Thirdly, i am going to do a trick: if len of string is more than 8, i can take first 8 chars into uint64_t and call one crc32 instead of eight, answer will be the same.
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
 woah! now hf does 2 times less tacts! What about time? 
-0,422s! That's 40% faster! Les gooo further
+0,440s! That's 37% faster! Let's go further
 
 #### Lst_search rewrite
 That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
 ![cg_o3_hf_lstsrch](/callgrind_results/cg_o3_hf_lstsrch.png)
-0,411s. I think hash table search function ate hash function. So, 41 % of time, not really much
+0,438s. I think hash table search function ate hash function. So, 41 % of time, not really much
 
 #### word_equal rewrite
 I think that i can rewrite word_equal function so strcmp will be short and inlined. Results:
 ![cg_o3_hf_lstsrch_we](/callgrind_results/cg_o3_hf_lstsrch_we.png)
-0,384s. 45%! worth it! (?)
+0,415s. 5% of last result and 45% from start! worth it! (?)
+
+#### inlining 
+Very simple method of speeding up. Instead of calling words_equal just copy it into lst_search function
+![cg_o3_hf_lstsrch_we_inl](/callgrind_results/cg_o3_hf_lstsrch_we_inl.png)
+0,396s. 5%, and 56% from start.
+
+#### adding avx
+Letsrewrite everything. We can store words as m256, it has 32 bytes capacity, words arent longer than 20.
