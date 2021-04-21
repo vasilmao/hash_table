@@ -8,9 +8,8 @@ void increase_capacity(List* list) {
     list->array = (value_type*)realloc(list->array, list->capacity * sizeof(value_type));
 }
 
-List* LST_Create(bool (*equality_function)(value_type val1, value_type val2)) {
+List* LST_Create() {
     List* new_list = (List*)calloc(1, sizeof(List));
-    new_list->equality_function = equality_function;
     new_list->capacity = START_CAPACITY;
     new_list->length = 0;
     new_list->array = (value_type*)calloc(new_list->capacity, sizeof(value_type));
@@ -44,7 +43,21 @@ asm(".intel_syntax noprefix\n"
         "mov rdi, [rdi + r8 * 2]\n" // word, not translation
         "mov rdx, rsi\n"            // word from argument
         "push r10\n"
-        "call [r9 + 24]\n"         // looks like pointer on eq function
+            "xor rcx, rcx\n"
+            "StrcmpLoop:\n"
+                "xor rcx, rcx\n"
+                "mov cl, byte ptr [rdi]\n"
+                "cmp cl, byte ptr [rdx]\n"
+                "jne LoopExit\n"
+                "inc rdi\n"
+                "inc rdx\n"
+                "cmp cl, 0\n"
+                "jne StrcmpLoop\n"
+                "mov rax, 1\n"
+                "jmp WordCompareExit\n"
+            "LoopExit:\n"
+            "xor rax, rax\n"
+            "WordCompareExit:"
         // rax - result - equal or not
         "pop r10\n"
         "cmp rax, 0\n"              // 0 - false, another - true

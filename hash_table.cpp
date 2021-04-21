@@ -1,14 +1,13 @@
 #include "hash_table.h"
 #include "stdio.h"
 
-HashTable* HT_Create(key_type (*hash_function)(value_type value), bool (*equality_function)(value_type val1, value_type val2)) {
+HashTable* HT_Create(key_type (*hash_function)(value_type value)) {
     HashTable* ht         = (HashTable*)calloc(1, sizeof(HashTable));
     ht->length            = HT_TABLE_SIZE;
     ht->hash_function     = hash_function;
-    ht->equality_function = equality_function;
     ht->array = (List**)calloc(ht->length, sizeof(List*));
     for (size_t i = 0; i < ht->length; ++i) {
-        ht->array[i] = LST_Create(equality_function);
+        ht->array[i] = LST_Create();
     }
     return ht;
 }

@@ -11,10 +11,9 @@ struct HashTable {
     size_t   length;
     List**   array;
     key_type (*hash_function)    (value_type value);
-    bool     (*equality_function)(value_type val1, value_type val2);
 };
 
-HashTable* HT_Create(key_type (*hash_function)(value_type value), bool (*equality_function)(value_type val1, value_type val2));
+HashTable* HT_Create(key_type (*hash_function)(value_type value));
 void       HT_Destroy(HashTable* table);
 value_type HT_search(HashTable* table, value_type find_value);
 void       HT_add(HashTable* table, value_type add_value);

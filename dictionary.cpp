@@ -5,7 +5,7 @@ char* EncodeCyrillicWithUtf8(char* word);
 
 Dictionary* DICT_CreateEmpty(key_type (*hash_function)(value_type value)) {
     Dictionary* dict = (Dictionary*)calloc(1, sizeof(Dictionary));
-    dict->table = HT_Create(hash_function, words_equal);
+    dict->table = HT_Create(hash_function);
     return dict;
 }
 
