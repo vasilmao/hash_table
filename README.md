@@ -97,7 +97,7 @@ Time really differs, average is 0,373s. +10%, and +46,5% total
 So, looking at callgrind: crc32 is already boosted, hash table needs to take modulo by prime number, O3 does it as fast as it can, and strlen is already very optimized function. Only we can do is to do some math crc32 optimizing or hash lst search inlining, that won't give us a lot of speed.
 
 ### 3.3 Results
-So, I have achieved almost 2x speed of (55,5% of) simple O3, the methods I used:
+So, I have achieved almost 2x speed of (53,5% of) simple O3, the methods I used:
 * inlining
 * intrinsic such as crc32, that O3 doesn't knows
 * assembler insertions
