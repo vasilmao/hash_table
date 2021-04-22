@@ -34,14 +34,14 @@ asm(".intel_syntax noprefix\n"
     "LST_search:\n"
     "vmovdqu ymm0, YMMWORD PTR [rsi]\n"
     "mov r10, [rdi]\n" // bucket size
-    "shl r10, 3\n" // bucket size * word size / 2 (8)
+    // "shl r10, 3\n" // bucket size * word size / 2 (8)
     "mov r8, 0\n" // bucket iterator * word size / 2 (8)
     "mov r9, rdi\n"
     "mov r11, [rdi + 16]\n"
     "LstSearchLoop:\n"
         "cmp r8, r10\n"
         "je LstSearchLoopExit\n"
-        "mov rdi, [r11 + r8 * 2]\n" // word, not translation
+        "mov rdi, [r11]\n" // word, not translation
         "vmovdqa ymm1, YMMWORD PTR [rdi]\n"
         "mov rdx, rsi\n"            // word from argument
         //"push r10\n"
@@ -50,15 +50,14 @@ asm(".intel_syntax noprefix\n"
             "vpmovmskb eax, ymm3\n"
         // rax - result - equal or not
         //"pop r10\n"
-        "cmp rax, 0\n"              // 0 - false, another - true
+        "test eax, eax\n"              // 0 - false, another - true
         "je LstSearchWrongWord\n"
-        "mov rax, [r11 + r8 * 2]\n" // word
-        "shl r8, 1\n" // r8 * 2
-        "add r8, 8\n" // r8 * 3
-        "mov rdx, [r11 + r8]\n"   // translation
+        "mov rax, [r11]\n" // word
+        "mov rdx, [r11 + 8]\n"   // translation
         "ret\n"
         "LstSearchWrongWord:\n"
-        "add r8, 8\n"
+        "inc r8\n"
+        "add r11, 16\n"
         "jmp LstSearchLoop\n"
     "LstSearchLoopExit:\n"
     "xor rax, rax\n"
