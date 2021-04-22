@@ -81,17 +81,25 @@ woah! now hf does 2 times less tacts! What about time?
 #### Lst_search rewrite
 That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
 ![cg_o3_hf_lstsrch](/callgrind_results/cg_o3_hf_lstsrch.png)
-0,438s. I think hash table search function ate hash function. So, 41 % of time, not really much
+0,438s. I think hash table search function ate list find function. So, it equals to the last one.
 
 #### word_equal rewrite
 I think that i can rewrite word_equal function so strcmp will be short and inlined. Results:
 ![cg_o3_hf_lstsrch_we](/callgrind_results/cg_o3_hf_lstsrch_we.png)
-0,415s. 5% of last result and 45% from start! worth it! (?)
+0,415s. +5% of last result and +40% from start! worth it! (?)
 
-#### inlining 
-Very simple method of speeding up. Instead of calling words_equal just copy it into lst_search function
-![cg_o3_hf_lstsrch_we_inl](/callgrind_results/cg_o3_hf_lstsrch_we_inl.png)
-0,396s. 5%, and 56% from start.
+#### Adding avx
+Let's rewrite everything. We can store words as 32 bytes, words arent longer than 20, so in compare function we can load words to vectors, and compare them as vectors. Also, inlining compare function will add some speed. So, the results:
+![cg_o3_hf_lstsrch_we_avx](/callgrind_results/cg_o3_hf_lstsrch_we_avx.png)
+Time really differs, average is 0,373s. +10%, and +46,5% total
 
-#### adding avx
-Letsrewrite everything. We can store words as m256, it has 32 bytes capacity, words arent longer than 20.
+#### It's time to stop
+So, looking at callgrind: crc32 is already boosted, hash table needs to take modulo by prime number, O3 does it as fast as it can, and strlen is already very optimized function. Only we can do is to do some math crc32 optimizing or hash lst search inlining, that won't give us a lot of speed.
+
+### 3.3 Results
+So, I have achieved almost 2x speed of (55,5% of) simple O3, the methods I used:
+* inlining
+* intrinsic such as crc32, that O3 doesn't knows
+* assembler insertions
+* avx instructions (also instructions for aligned memory)
+All optimizations could be found in commits
