@@ -102,4 +102,4 @@ So, I have achieved almost 2x speed of (53,5% of) simple O3, the methods I used:
 * intrinsic such as crc32, that O3 doesn't knows
 * assembler insertions
 * avx instructions (also instructions for aligned memory)
-All optimizations could be found in commits
+All optimization levels with full code can be found in branches
