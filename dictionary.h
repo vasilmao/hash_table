@@ -6,6 +6,10 @@
 
 struct Dictionary {
     HashTable* table;
+    char* buffer;
+    char* buffer_start;
+    size_t buffer_size;
+    size_t buffer_capacity;
 };
 
 Dictionary* DICT_CreateEmpty(key_type (*hash_function)(value_type value));

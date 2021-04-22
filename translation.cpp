@@ -11,6 +11,6 @@
 
 
 void DestroyElement(Word word) {
-    free(word.word);
-    free(word.translation);
+    // free(word.word);
+    // free(word.translation);
 }

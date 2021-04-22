@@ -1,18 +1,45 @@
 #include "dictionary.h"
 #include "stdio.h"
 
-char* EncodeCyrillicWithUtf8(char* word);
+void AddToBuffer(char* word, char* translation);
 
 Dictionary* DICT_CreateEmpty(key_type (*hash_function)(value_type value)) {
     Dictionary* dict = (Dictionary*)calloc(1, sizeof(Dictionary));
     dict->table = HT_Create(hash_function);
+    dict->buffer_size = 0;
+    dict->buffer_capacity = 1024;
+    dict->buffer_start = (char*)calloc(dict->buffer_capacity + 64, sizeof(char));
+    dict->buffer = dict->buffer_start;
+    while ((size_t)dict->buffer & 63) {
+        ++dict->buffer;
+    }
     return dict;
 }
 
 void DICT_Destroy(Dictionary* dict) {
     HT_Destroy(dict->table);
+    free(dict->buffer_start);
     free(dict);
 }
+
+void AddToBuffer(Dictionary* dict, char* word, char* translation) {
+    if (dict->buffer_capacity - dict->buffer_size < 64) {
+        dict->buffer_capacity <<= 1;
+        dict->buffer_start = (char*)realloc(dict->buffer_start, (dict->buffer_capacity + 64) * sizeof(char));
+        dict->buffer = dict->buffer_start;
+        while ((size_t)dict->buffer & 63) {
+            ++dict->buffer;
+        }
+    }
+    strcpy(dict->buffer + dict->buffer_size, word);
+    dict->buffer_size += 32;
+    //char* translation_copy_utf8 = EncodeCyrillicWithUtf8(translation);
+    strcpy(dict->buffer + dict->buffer_size, translation);
+    dict->buffer_size += 32;
+    //free(translation_copy_utf8);
+}
+
+
 
 void DICT_ParseFile(Dictionary* dict, char* filename, char separator) {
     FILE* file = NULL;
@@ -29,10 +56,13 @@ void DICT_ParseFile(Dictionary* dict, char* filename, char separator) {
         }
         *translation = '\0';
         ++translation;
-        DICT_AddWord(dict, line, translation);
+        AddToBuffer(dict, line, translation);
+        //DICT_AddWord(dict, line, translation);
         // printf("%s %s\n", line, translation);
-        if (translation)
         line = strtok(NULL, "\r\n");
+    }
+    for (size_t i = 0; i < dict->buffer_size; i += 64) {
+        DICT_AddWord(dict, dict->buffer + i, dict->buffer + (i + 32));
     }
     free(buffer);
     fclose(file);
@@ -46,33 +76,7 @@ char* DICT_GetTranslation(Dictionary* dict, char* word) {
 }
 
 void DICT_AddWord(Dictionary* dict, char* word, char* translation) {
-    char* word_copy = (char*)calloc(strlen(word) + 1, sizeof(char));
-    assert(word_copy);
-    strcpy(word_copy, word);
-    char* translation_copy_utf8 = EncodeCyrillicWithUtf8(translation);
-    HT_add(dict->table, {word_copy, translation_copy_utf8});
-}
-
-char* EncodeCyrillicWithUtf8(char* word) {
-    int len = strlen(word);
-    char* new_word = (char*)calloc(len * 2 + 1, sizeof(char));
-    char* new_word_start = new_word;
-    while (*word != '\0') {
-        if (*word >= 0) {
-            *(new_word++) = *word;
-        } else if (*word <= -17) {
-            *(new_word++) = 0xd0;
-            *(new_word++) = (*word + 32) + 0xb0;
-        } else if (*word == -72) {
-            *(new_word++) = 0xd1;
-            *(new_word++) = 0x91;
-        } else {
-            *(new_word++) = 0xd1;
-            *(new_word++) = (*word + 16) + 0x80;
-        }
-        ++word;
-    }
-    return new_word_start;
+    HT_add(dict->table, {word, translation});
 }
 
 size_t* DICT_GetTableStat(Dictionary* dict) {

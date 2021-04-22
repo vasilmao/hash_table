@@ -10,6 +10,31 @@ const int   div_end_len   = strlen(div_end);
 
 char* FindNextToken(char* string);
 void ToLower(char* word, int length);
+char* EncodeCyrillicWithUtf8(char* word);
+OutBuffer* CreateBuffer();
+void DestroyBuffer(OutBuffer* buf);
+
+char* EncodeCyrillicWithUtf8(char* word) {
+    int len = strlen(word);
+    char* new_word = (char*)calloc(len * 2 + 1, sizeof(char));
+    char* new_word_start = new_word;
+    while (*word != '\0') {
+        if (*word >= 0) {
+            *(new_word++) = *word;
+        } else if (*word <= -17) {
+            *(new_word++) = 0xd0;
+            *(new_word++) = (*word + 32) + 0xb0;
+        } else if (*word == -72) {
+            *(new_word++) = 0xd1;
+            *(new_word++) = 0x91;
+        } else {
+            *(new_word++) = 0xd1;
+            *(new_word++) = (*word + 16) + 0x80;
+        }
+        ++word;
+    }
+    return new_word_start;
+}
 
 void HTML_CreateTranslation(Dictionary* dict, const char* file_to_translate) {
     FILE* input_file = NULL;
@@ -21,9 +46,8 @@ void HTML_CreateTranslation(Dictionary* dict, const char* file_to_translate) {
     fclose(input_file);
 
     char* word = buffer;
-    char* current_word = (char*)calloc(100, sizeof(char));
+    char* current_word = (char*)calloc(32, sizeof(char));
     OutBuffer* out_buffer = CreateBuffer();
-
     while (*word != '\0') {
         char* word_end = word;
         int len = 0;
@@ -48,7 +72,10 @@ void HTML_CreateTranslation(Dictionary* dict, const char* file_to_translate) {
         }
 
         strncpy(current_word, word, len);
-        current_word[len] = '\0';
+        // current_word[len] = '\0';
+        for (int i = len; i < 32; ++i) {
+            current_word[i] = '\0';
+        }
         ToLower(current_word, len);
 
         WriteToBuffer(out_buffer, div_start, div_start_len);
@@ -56,7 +83,9 @@ void HTML_CreateTranslation(Dictionary* dict, const char* file_to_translate) {
         if (translation == NULL) {
             WriteToBuffer(out_buffer, "No such word\">", 14);
         } else {
+            translation = EncodeCyrillicWithUtf8(translation);
             WriteToBuffer(out_buffer, translation, strlen(translation));
+            free(translation);
             WriteToBuffer(out_buffer, "\">", 2);
         }
         WriteToBuffer(out_buffer, word, len);
