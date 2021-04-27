@@ -55,7 +55,7 @@ I will generate random words and pass it to dictionary. Words are generated rand
 
 | O0     | O1     | O2     | O3     |
 | ------ | ------ | ------ | ------ |
-| 1,009s | 0,775s | 0,751s | 0,700s |
+| 1,009s | 0,715s | 0,561s | 0,553s |
 
 So, that's it.   
 Let's see what callgrind says
@@ -71,7 +71,7 @@ To see the difference I will compare time and tacts from callgrind.
 Okay, at first, there is an intel command called crc32. Secondly, I am rewriting it in asm. Thirdly, I am going to do a trick: if len of string is more than 8, i can take first 8 chars into uint64_t and call one crc32 instead of eight, answer will be the same.
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
 woah! now hf does 2 times less tacts! What about time? 
-0,440s! That's 37% faster! Let's go further.
+0,440s! That's 21% faster! Let's go further.
 
 #### Lst_search rewrite
 That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
@@ -81,18 +81,18 @@ That function is second in the list. Rewriting it in asm. Here you should be car
 #### word_equal rewrite
 I think that I can rewrite word_equal function so strcmp will be short and inlined. Results:
 ![cg_o3_hf_lstsrch_we](/callgrind_results/cg_o3_hf_lstsrch_we.png)
-0,415s. +5% of last result and +40% from start! worth it! (?)
+0,415s. +5% of last result and +25% from start! worth it! (?)
 
 #### Adding avx
 Let's rewrite everything. We can store words as 32 bytes, words arent longer than 20, so in compare function we can load words to vectors, and compare them as vectors. Also, inlining compare function will add some speed. So, the results:
 ![cg_o3_hf_lstsrch_we_avx](/callgrind_results/cg_o3_hf_lstsrch_we_avx.png)
-Time really differs, average is 0,373s. +10%, and +46,5% total.
+Time really differs, average is 0,373s. +10%, and +32% total.
 
 #### It's time to stop
 So, looking at callgrind: crc32 is already boosted, hash table needs to take modulo by prime number, O3 does it as fast as it can, and strlen is already very optimized function. Only we can do is to do some math crc32 optimizing or hash lst search inlining, that won't give us a lot of speed.
 
 ### 3.3 Results
-So, I have achieved almost 2x speed of (53,5% of) simple O3, the methods I used:
+So, I have achieved version that is 32% faster than simple O3, the methods I used:
 * inlining
 * intrinsic such as crc32, that O3 doesn't knows
 * assembler insertions
