@@ -66,27 +66,27 @@ Callgrind of -O3:
 ### 3.2 analyzing
 Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, I will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search, strcmp and HT_Search.   
 To see the difference I will compare time and tacts from callgrind.
-### 3.3 rewriting
-#### crc32 rewrite
+### 3.3 refactoring
+#### crc32 refactoring
 Okay, at first, there is an intel command called crc32. Secondly, I am rewriting it in asm. Thirdly, I am going to do a trick: if len of string is more than 8, i can take first 8 chars into uint64_t and call one crc32 instead of eight, answer will be the same.
 ![cg_o3_hf](/callgrind_results/cg_o3_hf.png)
 woah! now hf does 2 times less tacts! What about time? 
-0,440s! That's 21% faster! Let's go further.
+0,440s! That's 21% faster than without optimizations (0,553s)! Let's go further.
 
-#### Lst_search rewrite
+#### Lst_search refactoring
 That function is second in the list. Rewriting it in asm. Here you should be careful with structures and their sizes
 ![cg_o3_hf_lstsrch](/callgrind_results/cg_o3_hf_lstsrch.png)
-0,438s. I think hash table search function ate list find function. So, it equals to the last one.
+0,438s versus last 0,440s. I think hash table search function ate list find function. So, it equals to the last one.
 
-#### word_equal rewrite
+#### word_equal refactoring
 I think that I can rewrite word_equal function so strcmp will be short and inlined. Results:
 ![cg_o3_hf_lstsrch_we](/callgrind_results/cg_o3_hf_lstsrch_we.png)
-0,415s. +5% of last result and +25% from start! worth it! (?)
+0,415s. +5% of last result (0,440s) and +25% from start! worth it! (?)
 
 #### Adding avx
 Let's rewrite words. We can store words as 32 bytes, words arent longer than 20, so in compare function we can load words to vectors, and compare them as vectors. Also, inlining compare function will add some speed. So, the results:
 ![cg_o3_hf_lstsrch_we_avx](/callgrind_results/cg_o3_hf_lstsrch_we_avx.png)
-Time really differs, average is 0,373s. +10%, and +32% total.
+Time really differs, average is 0,373s. +10% (last is 0,415), and +32% total.
 
 #### It's time to stop
 So, looking at callgrind: crc32 is already boosted, hash table needs to take modulo by prime number, O3 does it as fast as it can, and strlen is already very optimized function. Only we can do is to do some math crc32 optimizing or hash lst search inlining, that won't give us a lot of speed.
