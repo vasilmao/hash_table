@@ -1,5 +1,5 @@
 OBJ_DIR = obj
-FLAGS = -O1 -msse4 -mavx -mavx2
+FLAGS = -O3 -msse4 -mavx -mavx2
 
 speed_test: $(OBJ_DIR)/test_speed.o $(OBJ_DIR)/dictionary.o $(OBJ_DIR)/hash_table.o $(OBJ_DIR)/list.o $(OBJ_DIR)/hash_functions.o $(OBJ_DIR)/translation.o $(OBJ_DIR)/file_reader.o
 	g++ $(FLAGS) $(OBJ_DIR)/test_speed.o $(OBJ_DIR)/dictionary.o $(OBJ_DIR)/hash_table.o $(OBJ_DIR)/list.o $(OBJ_DIR)/hash_functions.o $(OBJ_DIR)/translation.o $(OBJ_DIR)/file_reader.o
