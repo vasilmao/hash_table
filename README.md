@@ -49,7 +49,7 @@ So, this is the best hash function and I will use it
 New make target creates .out file that gets .txt file as input and creates .html file with same text, but when you toggle word with your mouse it shows it's translation
 ## 3. Speeding up
 What I want is to speed up all of this.
-### 3.1 testing
+### 3.1 testing version without any optimizations
 Let's test the time.   
 I will generate random words and pass it to dictionary. Words are generated randomly chars from 0 to 128, length is random from 0 to 20. I will generate 15 000 words and try to find them 100 times each.   
 
@@ -62,7 +62,6 @@ Let's see what callgrind says
 Callgrind of -O3:
 ![cg_o3](/callgrind_results/cg_o3.png)
    
-
 
 ### 3.2 analyzing
 Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, I will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search, strcmp and HT_Search.   
