@@ -127,6 +127,5 @@ asm(".intel_syntax noprefix\n"
 //     for (int i = 0; i < length; ++i) {
 //         crc_ans = _mm_crc32_u8(crc_ans, data[i]);
 //     }
-//     //printf("%zu %zu\n", crc_ans,  hash_function_crc32_1(word));
 //     return crc_ans;
 // }
