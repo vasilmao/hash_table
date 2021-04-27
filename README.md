@@ -84,7 +84,7 @@ I think that I can rewrite word_equal function so strcmp will be short and inlin
 0,415s. +5% of last result and +25% from start! worth it! (?)
 
 #### Adding avx
-Let's rewrite everything. We can store words as 32 bytes, words arent longer than 20, so in compare function we can load words to vectors, and compare them as vectors. Also, inlining compare function will add some speed. So, the results:
+Let's rewrite words. We can store words as 32 bytes, words arent longer than 20, so in compare function we can load words to vectors, and compare them as vectors. Also, inlining compare function will add some speed. So, the results:
 ![cg_o3_hf_lstsrch_we_avx](/callgrind_results/cg_o3_hf_lstsrch_we_avx.png)
 Time really differs, average is 0,373s. +10%, and +32% total.
 
