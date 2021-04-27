@@ -48,31 +48,24 @@ So, this is the best hash function and I will use it
 ## 2. Real dictionary
 New make target creates .out file that gets .txt file as input and creates .html file with same text, but when you toggle word with your mouse it shows it's translation
 ## 3. Speeding up
-What I want is to speed up all of this. Let's test the time.   
-I will generate random words and pass it to dictionary. Words are generated randomly chars from 0 to 128, length is random from 0 to 20. I will generate 15 000 words and try to find them 100 times each.
+What I want is to speed up all of this.
 ### 3.1 testing
+Let's test the time.   
+I will generate random words and pass it to dictionary. Words are generated randomly chars from 0 to 128, length is random from 0 to 20. I will generate 15 000 words and try to find them 100 times each.   
+
 | O0     | O1     | O2     | O3     |
 | ------ | ------ | ------ | ------ |
 | 1,009s | 0,675s | 0,551s | 0,700s |
 
 So, that's it.   
 Let's see what callgrind says
-![cg_o0](/callgrind_results/cg_o0.png)
-This is callgrind of -O0.   
-   
-![cg_o1](/callgrind_results/cg_o1.png)
-Callgrind of -O1.   
-   
-![cg_o2](/callgrind_results/cg_o2.png)
-Callgrind of -O2.   
-   
+Callgrind of -O3:
 ![cg_o3](/callgrind_results/cg_o3.png)
-Callgrind of -O3.   
    
 
 
 ### 3.2 analyzing
-O2, O3 doesn't really differ. Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, I will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search, strcmp and HT_Search.   
+Let's try to optimize some functions. I won't optimize functions such as DoTests or random that generates tests, I will only speed up functions that called while getting answer. The slowest is hash_funcions_crc32, next is LST_search, strcmp and HT_Search.   
 To see the difference I will compare time and tacts from callgrind.
 ### 3.3 rewriting
 #### crc32 rewrite
