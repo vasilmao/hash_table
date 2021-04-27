@@ -55,7 +55,7 @@ I will generate random words and pass it to dictionary. Words are generated rand
 
 | O0     | O1     | O2     | O3     |
 | ------ | ------ | ------ | ------ |
-| 1,009s | 0,675s | 0,551s | 0,700s |
+| 1,009s | 0,775s | 0,751s | 0,700s |
 
 So, that's it.   
 Let's see what callgrind says
